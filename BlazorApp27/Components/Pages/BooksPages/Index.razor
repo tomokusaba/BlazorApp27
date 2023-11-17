@@ -1,0 +1,28 @@
+﻿@page "/books"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject BlazorApp27.Data.BlazorApp27Context DB
+@using BlazorApp27.Model
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="books/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.Books">
+    <PropertyColumn Property="books => books.Title" />
+    <PropertyColumn Property="books => books.Author" />
+    <PropertyColumn Property="books => books.Description" />
+    <PropertyColumn Property="books => books.Genre" />
+    <PropertyColumn Property="books => books.Publisher" />
+    <PropertyColumn Property="books => books.PublishedDate" />
+    <PropertyColumn Property="books => books.ISBN" />
+
+    <TemplateColumn Context="books">
+        <a href="@($"books/edit?id={books.Id}")">Edit</a> |
+        <a href="@($"books/details?id={books.Id}")">Details</a> |
+        <a href="@($"books/delete?id={books.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>

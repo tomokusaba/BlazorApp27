@@ -1,4 +1,4 @@
-﻿using BlazorApp27.Components;
+using BlazorApp27.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using BlazorApp27.Data;
@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 builder.Services.AddDbContext<BlazorApp27Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BlazorApp27Context") ?? throw new InvalidOperationException("Connection string 'BlazorApp27Context' not found.")));
 builder.Services.AddFluentUIComponents();
@@ -16,6 +18,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

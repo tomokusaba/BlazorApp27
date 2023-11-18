@@ -1,6 +1,6 @@
 ﻿@page "/books"
-@using Microsoft.AspNetCore.Components.QuickGrid
 @inject BlazorApp27.Data.BlazorApp27Context DB
+@inject NavigationManager NavigationManager
 @using BlazorApp27.Model
 
 <PageTitle>Index</PageTitle>
@@ -8,10 +8,11 @@
 <h1>Index</h1>
 
 <p>
-    <a href="books/create">Create New</a>
+    <FluentAnchor IconStart="@(new Icons.Regular.Size24.FormNew())" Href="books/create" />
+
 </p>
 
-<QuickGrid Class="table" Items="DB.Books">
+<FluentDataGrid Items="@books" TGridItem="Books">
     <PropertyColumn Property="books => books.Title" />
     <PropertyColumn Property="books => books.Author" />
     <PropertyColumn Property="books => books.Description" />
@@ -20,9 +21,24 @@
     <PropertyColumn Property="books => books.PublishedDate" />
     <PropertyColumn Property="books => books.ISBN" />
 
-    <TemplateColumn Context="books">
-        <a href="@($"books/edit?id={books.Id}")">Edit</a> |
-        <a href="@($"books/details?id={books.Id}")">Details</a> |
-        <a href="@($"books/delete?id={books.Id}")">Delete</a>
+    <TemplateColumn>
+        <FluentAnchor IconStart="@(new Icons.Regular.Size24.Edit())" Href="@($"books/edit?id={context.Id}")" />
+        <FluentAnchor IconStart="@(new Icons.Regular.Size24.AppsListDetail())" Href="@($"books/details?id={context.Id}")" />
+        <FluentAnchor IconStart="@(new Icons.Regular.Size24.Delete())" Href="@($"books/delete?id={context.Id}")" />
     </TemplateColumn>
-</QuickGrid>
+</FluentDataGrid>
+
+
+@code {
+    IQueryable<Books>? books;
+
+    protected override void OnInitialized()
+    {
+        books = DB.Books.ToList().AsQueryable();
+    }
+
+    private void OnRowClick(int id)
+    {
+        NavigationManager.NavigateTo($"books/details?id={id}");
+    }
+}
